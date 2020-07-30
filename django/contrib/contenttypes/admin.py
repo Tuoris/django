@@ -98,6 +98,9 @@ class GenericInlineModelAdmin(InlineModelAdmin):
             # GenericInlineModelAdmin doesn't define its own.
             exclude.extend(self.form._meta.exclude)
         exclude = exclude or None
+        field_classes = None
+        if hasattr(self.form, '_meta') and self.form._meta.field_classes:
+            field_classes = self.form._meta.field_classes
         can_delete = self.can_delete and self.has_delete_permission(request, obj)
         defaults = {
             'ct_field': self.ct_field,
@@ -109,6 +112,7 @@ class GenericInlineModelAdmin(InlineModelAdmin):
             'can_delete': can_delete,
             'can_order': False,
             'fields': fields,
+            'field_classes': field_classes,
             'min_num': self.get_min_num(request, obj),
             'max_num': self.get_max_num(request, obj),
             'exclude': exclude,
